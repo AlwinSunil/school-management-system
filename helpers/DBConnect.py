@@ -13,13 +13,14 @@ try:
         db_Info = connection.get_server_info()
         print(fg(2)+" Connected to MySQL Server version " + db_Info + attr(0))
         cursor = connection.cursor()
-        cursor.execute("use school")
-        record = cursor.fetchone()
-        print(" You're connected to database: ", record)
+        cursor.execute("use school;")
+        # here record type is list
+        print(" You're connected to database: school")
+
 except Error as e:
     print(fg(1) + " Error while connecting to MySQL : " + e + attr(0))
 
-#     if connection.is_connected():
+#     code to close connection
 #         cursor.close()
 #         connection.close()
 #         print("MySQL connection is closed")

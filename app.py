@@ -1,7 +1,7 @@
 import inquirer
 from helpers import DBConnect
 from colored import fg, bg, attr
-from components import admin
+from components import admin, office, teacher
 from QueryList import LoginQueryDef, ExitQueryDef
 
 app = True
@@ -20,6 +20,12 @@ while app == True:
                 admin.main()
                 USERACCESS = "admin"
 
+    if LoginQuery["login"] == "For Office":
+        office.main()
+
+    if LoginQuery["login"] == "For Teachers":
+        teacher.main()
+
     if USERACCESS == "admin":
         admin.read()
 
@@ -28,6 +34,7 @@ while app == True:
     if ExitQuery["exit"] == "yes":
         app = False
         USERACCESS = None
+        print("App closed")
     else:
         app = True
         USERACCESS = USERACCESS
