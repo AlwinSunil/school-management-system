@@ -17,14 +17,26 @@ try:
 except Error as e:
     print(fg(1) + " Error while connecting to MySQL : " + e + attr(0))
 
+print("==================================================")
 
-def handleSQLCall(query):
+
+def handleSQLCall(query, attribute=None):
     try:
         cursor.execute(query)
         record = cursor.fetchall()
+        connection.commit()
+        if attribute != None:
+            print(fg(2) + "Updated " + attribute + " successfully" + attr(0))
         return record
     except Error as err:
         print(fg(1) + f"Error: '{err}'" + attr(0))
 
 
-print("==================================================")
+def handleSQLType(data):
+    if data.isnumeric == True:
+        instance = int(data)
+        return instance
+    elif isinstance(data, str) == True:
+        return "'" + data + "'"
+    else:
+        return data

@@ -1,4 +1,3 @@
-import time
 import inquirer
 from helpers import DBConnect
 from colored import fg, attr
@@ -7,8 +6,6 @@ from QueryList import LoginQueryDef, ExitQueryDef
 
 app = True
 USERACCESS = None
-
-print(time.ctime())
 
 while app == True:
     color = fg(13)
@@ -20,7 +17,6 @@ while app == True:
         if USERACCESS != "admin":
             pwd = input(color + "Enter password to enter: " + att)
             if pwd == "123":
-                admin.main()
                 USERACCESS = "admin"
 
     if LoginQuery["login"] == "For Office":
@@ -32,6 +28,7 @@ while app == True:
         teacher.main()
 
     if USERACCESS == "admin":
+        admin.main()
         admin.read()
 
     ExitQuery = inquirer.prompt(ExitQueryDef)
