@@ -1,29 +1,34 @@
+import time
 import inquirer
 from helpers import DBConnect
-from colored import fg, bg, attr
+from colored import fg, attr
 from components import admin, office, teacher
 from QueryList import LoginQueryDef, ExitQueryDef
 
 app = True
 USERACCESS = None
 
+print(time.ctime())
+
 while app == True:
     color = fg(13)
     att = attr(0)
-    print('%s School management system %s' % (fg(3), attr(0)))
+    print("%s School management system %s" % (fg(3), attr(0)))
     LoginQuery = inquirer.prompt(LoginQueryDef)
 
     if LoginQuery["login"] == "For Admin":
-        if USERACCESS == None:
+        if USERACCESS != "admin":
             pwd = input(color + "Enter password to enter: " + att)
-            if (pwd == "123"):
+            if pwd == "123":
                 admin.main()
                 USERACCESS = "admin"
 
     if LoginQuery["login"] == "For Office":
+        USERACCESS = "office"
         office.main()
 
     if LoginQuery["login"] == "For Teachers":
+        USERACCESS = "teachers"
         teacher.main()
 
     if USERACCESS == "admin":
