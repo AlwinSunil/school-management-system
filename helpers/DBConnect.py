@@ -1,6 +1,6 @@
-from mysql.connector import Error
 from colored import fg, attr
 import mysql.connector
+from mysql.connector import Error
 
 print("==================================================")
 print("%s Initializing connection to mySQL server %s" % (fg(4), attr(0)))
@@ -24,10 +24,11 @@ def handleSQLCall(query, attribute=None):
     try:
         cursor.execute(query)
         record = cursor.fetchall()
+        columns = cursor.column_names
         connection.commit()
         if attribute != None:
             print(fg(2) + "Updated " + attribute + " successfully" + attr(0))
-        return record
+        return {"columns": columns, "data": record}
     except Error as err:
         print(fg(1) + f"Error: '{err}'" + attr(0))
 

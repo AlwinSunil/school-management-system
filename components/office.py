@@ -1,8 +1,10 @@
-from colored import fg, attr
-from helpers.DBConnect import handleSQLCall
 import inquirer
+from colored import fg, attr
+from components.functions import showAllRecords
+from helpers.DBConnect import handleSQLCall
+from helpers.DisplayInfo import displayInfoPrint
+from helpers.UpdateInfo import updateInfoStudent
 from texttable import *
-from helpers.UpdateInfo import UpdateStudentInfo
 
 QueryDef = [
     inquirer.List(
@@ -10,7 +12,7 @@ QueryDef = [
         message="Select option :",
         choices=[
             "Get details of student",
-            "Get Fee details of student",
+            "Check/Update FEE details of student",
             "Show records of all students",
         ],
         default="Get details of student",
@@ -23,31 +25,7 @@ def main():
     res = inquirer.prompt(QueryDef)
 
     if res["read"] == "Show records of all students":
-        table = Texttable()
-        table.set_deco(Texttable.HEADER)
-        table.set_cols_dtype(["i", "t", "t", "i", "t", "t", "a", "i", "a"])
-        table.set_cols_align(["l", "r", "r", "r", "r", "r", "l", "l", "l"])
-        tableList = [
-            [
-                "Adm No",
-                "Adm Date",
-                "Name",
-                "Class",
-                "Divison",
-                "DOB",
-                "Address",
-                "Number",
-                "Email",
-            ]
-        ]
-        record = handleSQLCall("select * from students;")
-
-        for row in record:
-            tableList.append(
-                [row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]]
-            )
-        table.add_rows(tableList)
-        print(table.draw())
+        showAllRecords("students")
 
     elif res["read"] == "Get details of student":
         color = fg(13)
@@ -63,6 +41,7 @@ def main():
 
         printFields = [
             "Admission No: ",
+            "Admission Date: ",
             "Name: ",
             "Class: ",
             "Divison: ",
@@ -72,16 +51,9 @@ def main():
             "Email: ",
             "Class Teacher: ",
         ]
+        displayInfoPrint(printFields, record["data"], color_fg=50, color_att=0)
 
-        for row in record:
-            color = fg(50)
-            att = attr(0)
-            for field in range(len(printFields)):
-                print(printFields[field], color + str(row[field]) + att)
-
-        print("==================================================")
-
-    elif res["read"] == "Get Fee details of student":
+    elif res["read"] == "Check/Update FEE details of student":
         color = fg(50)
         att = attr(0)
         admn = input(color + "Enter admission no : " + att)
@@ -92,14 +64,6 @@ def main():
             + ";"
         )
         record = handleSQLCall(SQL_QUERY)
-
-        def getStatus(data):
-            if data == 1:
-                return "Paid"
-            elif data == 0:
-                return "Not Paid"
-            else:
-                return data
 
         printFields = [
             "Adm No: ",
@@ -115,10 +79,6 @@ def main():
             "3rd Term Status: ",
             "3rd Term Payment Date: ",
         ]
+        displayInfoPrint(printFields, record["data"], color_fg=50, color_att=0)
 
-        for row in record:
-            for field in range(len(printFields)):
-                print(printFields[field], color + str(getStatus(row[field])) + att)
-
-        record = UpdateStudentInfo(admn, "feepayment")
-        print(record)
+        record = updateInfoStudent(admn, "feepayment")

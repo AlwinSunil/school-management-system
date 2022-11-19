@@ -1,6 +1,5 @@
-from helpers.DBConnect import handleSQLCall, handleSQLType
 import inquirer
-from texttable import *
+from helpers.DBConnect import handleSQLCall, handleSQLType
 
 UpdateQueryDef = [
     inquirer.List(
@@ -15,11 +14,12 @@ UpdateQueryDef = [
 ]
 
 
-def UpdateStudentInfo(admn, database):
+def updateInfoStudent(admn, database):
     UpdateQueryRes = inquirer.prompt(UpdateQueryDef)
 
     if UpdateQueryRes["update"] == "yes":
         record = handleSQLCall("desc " + database + ";")
+        record = record["data"]
 
         attributes = list()
         for att in record:
