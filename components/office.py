@@ -8,7 +8,7 @@ from texttable import *
 
 QueryDef = [
     inquirer.List(
-        "read",
+        "office",
         message="Select option :",
         choices=[
             "Get details of student",
@@ -24,10 +24,10 @@ def main():
     print("%s Logged in as Office %s" % (fg(2), attr(0)))
     res = inquirer.prompt(QueryDef)
 
-    if res["read"] == "Show records of all students":
+    if res["office"] == "Show records of all students":
         showAllRecords("students")
 
-    elif res["read"] == "Get details of student":
+    elif res["office"] == "Get details of student":
         color = fg(13)
         att = attr(0)
         admn = input(color + "Enter admission no : " + att)
@@ -53,7 +53,7 @@ def main():
         ]
         displayInfoPrint(printFields, record["data"], color_fg=50, color_att=0)
 
-    elif res["read"] == "Check/Update FEE details of student":
+    elif res["office"] == "Check/Update FEE details of student":
         color = fg(50)
         att = attr(0)
         admn = input(color + "Enter admission no : " + att)

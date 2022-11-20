@@ -20,14 +20,22 @@ except Error as e:
 print("==================================================")
 
 
-def handleSQLCall(query, attribute=None):
+def handleSQLCall(query, option=None, database=None, column=None):
     try:
         cursor.execute(query)
         record = cursor.fetchall()
         columns = cursor.column_names
         connection.commit()
-        if attribute != None:
-            print(fg(2) + "Updated " + attribute + " successfully" + attr(0))
+        if option == "update":
+            print(fg(2) + "Updated " + column + " successfully" + attr(0))
+        elif option == "insert":
+            print(
+                fg(2)
+                + "Inserted data into database: "
+                + database
+                + ", successfully"
+                + attr(0)
+            )
         return {"columns": columns, "data": record}
     except Error as err:
         print(fg(1) + f"Error: '{err}'" + attr(0))

@@ -48,6 +48,7 @@ def showStudentRecords():
 
     printFields = [
         "Admission No: ",
+        "Admission Date: ",
         "Name: ",
         "Class: ",
         "Divison: ",

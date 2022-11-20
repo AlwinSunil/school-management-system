@@ -3,10 +3,11 @@ import inquirer
 from components.functions import showStudentRecords
 from helpers.DBConnect import handleSQLCall
 from helpers.DisplayInfo import displayInfoPrint
+from helpers.UpdateInfo import updateInfoStudent
 
 QueryDef = [
     inquirer.List(
-        "read",
+        "teacher",
         message="Select option :",
         choices=[
             "Get details of student",
@@ -21,7 +22,7 @@ def main():
     print("%s Logged in as Teacher %s" % (fg(2), attr(0)))
     res = inquirer.prompt(QueryDef)
 
-    if res["read"] == "See progress card of student":
+    if res["teacher"] == "See progress card of student":
         color = fg(13)
         att = attr(0)
         admn = input(color + "Enter admission no : " + att)
@@ -40,5 +41,7 @@ def main():
         print("Progress Report of ")
         displayInfoPrint(printFields, record["data"], color_fg=50, color_att=0)
 
-    elif res["read"] == "Get details of student":
+        updateInfoStudent(admn, "progresscard")
+
+    elif res["teacher"] == "Get details of student":
         showStudentRecords()

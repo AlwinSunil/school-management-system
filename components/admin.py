@@ -8,12 +8,13 @@ from texttable import *
 
 QueryDef = [
     inquirer.List(
-        "read",
+        "admin",
         message="Select option :",
         choices=[
             "Show all records",
             "Get specific record",
             "Run custom mySQL commands",
+            "Add new Student/ProgressCard/Teacher",
         ],
         default="Get specific record",
     ),
@@ -31,17 +32,48 @@ UpdateQueryDef = [
     ),
 ]
 
+AddDataQueryDef = [
+    inquirer.List(
+        "add",
+        message="Whose data your are adding??",
+        choices=[
+            "Student",
+            "ProgressCard",
+            "Teacher",
+        ],
+        default="Student",
+    ),
+]
+
+
+def AddNewData(database):
+    record = handleSQLCall("desc " + database + ";")
+    record = record["data"]
+
+    attributes = list()
+    for att in record:
+        attributes.append(att[0])
+
+    data = list()
+    for att in attributes:
+        inputData = input("Enter " + att + " : ")
+        if inputData.isnumeric() == True:
+            inputData = int(inputData)
+        data.append(inputData)
+    data = str(tuple(data))
+
+    SQL_QUERY = "INSERT INTO " + database + " VALUES" + data + " ;"
+    record = handleSQLCall(SQL_QUERY, option="insert", database=database)
+
 
 def main():
     print("%s Logged in as Admin %s" % (fg(2), attr(0)))
 
-
-def read():
     res = inquirer.prompt(QueryDef)
-    if res["read"] == "Show all records":
+    if res["admin"] == "Show all records":
         showAllRecords("students")
 
-    elif res["read"] == "Get specific record":
+    elif res["admin"] == "Get specific record":
         color = fg(13)
         att = attr(0)
         admn = input(color + "Enter admission no : " + att)
@@ -56,6 +88,7 @@ def read():
 
         printFields = [
             "Admission No: ",
+            "Admission Date: ",
             "Name: ",
             "Class: ",
             "Divison: ",
@@ -70,7 +103,7 @@ def read():
 
         updateInfoStudent(admn, "students")
 
-    elif res["read"] == "Run custom mySQL commands":
+    elif res["admin"] == "Run custom mySQL commands":
         print(
             fg(1)
             + "WARNING!! This option gives access to enter any SQL command"
@@ -85,3 +118,15 @@ def read():
             print("Raw result from SQL server: ", record["data"])
 
         print("==================================================")
+
+    elif res["admin"] == "Add new Student/ProgressCard/Teacher":
+        res = inquirer.prompt(AddDataQueryDef)
+
+        if res["add"] == "Student":
+            AddNewData("students")
+
+        elif res["add"] == "ProgressCard":
+            AddNewData("progresscard")
+
+        elif res["add"] == "Teacher":
+            AddNewData("class_teachers")

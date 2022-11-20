@@ -51,4 +51,4 @@ def updateInfoStudent(admn, database):
                     + ";"
                 )
 
-                handleSQLCall(SQL_QUERY, attribute)
+                handleSQLCall(SQL_QUERY, option="update", column=attribute)

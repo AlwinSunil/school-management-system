@@ -29,7 +29,6 @@ while app == True:
 
     if USERACCESS == "admin":
         admin.main()
-        admin.read()
 
     ExitQuery = inquirer.prompt(ExitQueryDef)
 
